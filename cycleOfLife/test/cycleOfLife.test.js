@@ -22,8 +22,8 @@ test('Hello Cell World', () => {
 })
 
 function giveLife(width, height, world) {
-  if (width < 0)
-    throw "Out of bound"
+  if (width < 0 || height < 0)
+    throw "Out of bounds"
   world[height][width] = 1
 }
 
@@ -33,7 +33,20 @@ test('Hello living Cell', () => {
   expect(world[1][2]).toBe(1)
 })
 
-test('Give life not on bound', () => {
+test('Give life not in bound with width', () => {
   const world = createWorld(3,3)
-  expect(() => giveLife(-1, 2, world)).toThrow()
+  try {
+    giveLife(-1, 2, world)
+  } catch (error) {
+    expect(error).toBe('Out of bounds')
+  }
+})
+
+test('Give life not in bound with height', () => {
+  const world = createWorld(3,3)
+  try {
+    giveLife(1, -2, world)
+  } catch (error) {
+    expect(error).toBe('Out of bounds')
+  }
 })
