@@ -24,8 +24,47 @@ function giveStateOfCellIn(width, height, world) {
   return world[height][width]
 }
 
+/*
+State Initial
+000
+110
+010
+Resolve World
+000
+110
+010
+*/
 function resolveWorldTick(world) {
-  world[1][1] = State.dead
+  for (let height = 0; height < world.length; height++) {
+    for (let width = 0; width < world[height].length; width++) {
+      if (shouldDie(width, height, world)) {
+        world[height][width] = State.dead
+      }
+    }
+  }
+}
+
+function shouldDie(width, height, world) {
+  let countAlive = 0
+  
+  // Left
+  countAlive += ((width - 1 >= 0) && world[width - 1][height] == State.alive) ? 1 : 0 
+  // Right
+  countAlive += ((width + 1 < world[0].length) && world[width + 1][height] == State.alive) ? 1 : 0 
+  // Bottom
+  countAlive += ((height + 1 < world.length) && world[width][height - 1] == State.alive) ? 1 : 0 
+  // Top
+  countAlive += ((height - 1 >= 0) && world[width][height + 1] == State.alive) ? 1 : 0 
+
+  // Left + Top
+  countAlive += ((width - 1 >= 0) && (height - 1 >= 0) && world[width - 1][height - 1] == State.alive) ? 1 : 0 
+  // Left + Bot
+  countAlive += ((width - 1 >= 0) && (height + 1 < world.length) && world[width - 1][height + 1] == State.alive) ? 1 : 0 
+  // Right + Top
+  countAlive += ((width + 1 < world[0].length) && (height - 1 >= 0) && world[width + 1][height - 1] == State.alive) ? 1 : 0 
+  // Right + Bot
+  countAlive += ((width + 1 < world[0].length) && (height + 1 < world.length) && world[width + 1][height + 1] == State.alive) ? 1 : 0 
+  return countAlive < 2;
 }
 
 test('Hello Cell World', () => {
@@ -73,4 +112,25 @@ test('If one cell is alone it should die', () => {
   const result = giveStateOfCellIn(1, 1, world)
 
   expect(result).toBe(State.dead)
+})
+
+test('If one cell has two neighbors it should stay alive', () => {
+  // Given 
+  const world = createWorld(3, 3)
+  /*
+  000
+  110
+  010 
+  */
+  giveLife(0, 1, world)
+  giveLife(1, 1, world)
+  giveLife(2, 1, world)
+
+  // When
+  resolveWorldTick(world)
+  
+  // Then
+  expect(giveStateOfCellIn(0, 1, world)).toBe(State.alive)
+  expect(giveStateOfCellIn(1, 1, world)).toBe(State.alive)
+  expect(giveStateOfCellIn(2, 1, world)).toBe(State.alive)
 })
