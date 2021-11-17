@@ -35,36 +35,49 @@ Resolve World
 010
 */
 function resolveWorldTick(world) {
+
+	let mapCopy = _.cloneDeep(world)
+
+
+
   for (let height = 0; height < world.length; height++) {
     for (let width = 0; width < world[height].length; width++) {
-      if (shouldDie(width, height, world)) {
-        world[height][width] = State.dead
+      const stateOfCell = shouldDie(height, width, world)
+      console.log(stateOfCell)
+      if (stateOfCell) {
+        mapCopy[height][width] = State.dead
       }
     }
   }
+
+	return mapCopy
 }
 
-function shouldDie(width, height, world) {
+function shouldDie(height, width, world) { //height, width
   let countAlive = 0
   
-  // Left
-  countAlive += ((width - 1 >= 0) && world[width - 1][height] == State.alive) ? 1 : 0 
-  // Right
-  countAlive += ((width + 1 < world[0].length) && world[width + 1][height] == State.alive) ? 1 : 0 
-  // Bottom
-  countAlive += ((height + 1 < world.length) && world[width][height - 1] == State.alive) ? 1 : 0 
-  // Top
-  countAlive += ((height - 1 >= 0) && world[width][height + 1] == State.alive) ? 1 : 0 
+  // top
+  countAlive += ((height - 1 >= 0) && world[height - 1][width] == State.alive) ? 1 : 0 
+  // bottom
+  countAlive += ((height + 1 < world[0].length) && world[height + 1][width] == State.alive) ? 1 : 0 
+  // right
+  countAlive += ((width + 1 < world.length) && world[height][width + 1] == State.alive) ? 1 : 0 
+  // left
+  countAlive += ((width - 1 >= 0) && world[height][width - 1] == State.alive) ? 1 : 0 
 
   // Left + Top
-  countAlive += ((width - 1 >= 0) && (height - 1 >= 0) && world[width - 1][height - 1] == State.alive) ? 1 : 0 
+  countAlive += ((height - 1 >= 0) && (width - 1 >= 0) && world[height - 1][width - 1] == State.alive) ? 1 : 0 
+  // right + Top
+  countAlive += ((height - 1 >= 0) && (width + 1 < world.length) && world[height - 1][width + 1] == State.alive) ? 1 : 0 
   // Left + Bot
-  countAlive += ((width - 1 >= 0) && (height + 1 < world.length) && world[width - 1][height + 1] == State.alive) ? 1 : 0 
-  // Right + Top
-  countAlive += ((width + 1 < world[0].length) && (height - 1 >= 0) && world[width + 1][height - 1] == State.alive) ? 1 : 0 
+  countAlive += ((height + 1 < world[0].length) && (width - 1 >= 0) && world[height + 1][width - 1] == State.alive) ? 1 : 0 
   // Right + Bot
-  countAlive += ((width + 1 < world[0].length) && (height + 1 < world.length) && world[width + 1][height + 1] == State.alive) ? 1 : 0 
-  return countAlive < 2;
+  countAlive += ((height + 1 < world[0].length) && (width + 1 < world.length) && world[height + 1][width + 1] == State.alive) ? 1 : 0 
+  
+  console.log('State of '+height+', '+width+' => '+ countAlive)
+  
+  return countAlive < 2
+
 }
 
 test('Hello Cell World', () => {
@@ -108,13 +121,16 @@ test('If one cell is alone it should die', () => {
   const world = createWorld(3, 3)
   giveLife(1, 1, world)
 
-  resolveWorldTick(world)
-  const result = giveStateOfCellIn(1, 1, world)
+  const newWorld = resolveWorldTick(world)
+  const result = giveStateOfCellIn(1, 1, newWorld)
+
 
   expect(result).toBe(State.dead)
 })
 
-test('If one cell has two neighbors it should stay alive', () => {
+console.log('----------------')
+
+test('If one cell has two or three neighbors it should stay alive', () => {
   // Given 
   const world = createWorld(3, 3)
   /*
@@ -122,15 +138,49 @@ test('If one cell has two neighbors it should stay alive', () => {
   110
   010 
   */
-  giveLife(0, 1, world)
+  giveLife(1, 0, world)
   giveLife(1, 1, world)
   giveLife(2, 1, world)
 
   // When
-  resolveWorldTick(world)
+  const newWorld = resolveWorldTick(world)
   
   // Then
-  expect(giveStateOfCellIn(0, 1, world)).toBe(State.alive)
-  expect(giveStateOfCellIn(1, 1, world)).toBe(State.alive)
-  expect(giveStateOfCellIn(2, 1, world)).toBe(State.alive)
+  expect(giveStateOfCellIn(1, 0, newWorld)).toBe(State.alive)
+  expect(giveStateOfCellIn(1, 1, newWorld)).toBe(State.alive)
+  expect(giveStateOfCellIn(2, 1, newWorld)).toBe(State.alive)
+})
+
+
+test('If a cell got more than 3 neighboor', () => {
+	//given 
+	const world = createWorld(3,3)
+	
+	//start
+	//010
+	//111
+	//010
+	//expected
+	//010
+	//101
+	//010
+	
+
+	giveLife(0,1, world)
+	giveLife(1,0, world)
+	giveLife(1,1, world)
+	giveLife(1,2, world)
+	giveLife(2,1, world)
+	//When
+	const newWorld =  resolveWorldTick(world)
+
+	//Then
+	expect(giveStateOfCellIn( 0, 1, newWorld)).tobe(State.alive)
+	expect(giveStateOfCellIn( 1, 0, newWorld)).tobe(State.alive)
+	expect(giveStateOfCellIn( 1, 1, newWorld)).tobe(State.dead)
+	expect(giveStateOfCellIn( 1, 2, newWorld)).tobe(State.alive)
+	expect(giveStateOfCellIn( 2, 1, newWorld)).tobe(State.alive)
+
+
+
 })
