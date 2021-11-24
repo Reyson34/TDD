@@ -197,7 +197,7 @@ test('If a cell got more than 3 neighboor', () => {
 	expect(giveStateOfCellIn( 2, 1, newWorld)).toBe(State.alive)
 })
 
-test('If a dead cell is surounded by 3 cells alive it should be resurected', () => {
+test('If a dead cell is surounded by 3 cells alive it should be resurrected', () => {
   const world = createWorld(3, 3)
 
   
