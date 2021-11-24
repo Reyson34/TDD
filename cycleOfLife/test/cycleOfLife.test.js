@@ -76,8 +76,7 @@ function shouldDie(height, width, world) { //height, width
   
   console.log('State of '+height+', '+width+' => '+ countAlive)
   
-  return countAlive < 2
-
+  return countAlive < 2 || countAlive > 3
 }
 
 test('Hello Cell World', () => {
@@ -175,12 +174,9 @@ test('If a cell got more than 3 neighboor', () => {
 	const newWorld =  resolveWorldTick(world)
 
 	//Then
-	expect(giveStateOfCellIn( 0, 1, newWorld)).tobe(State.alive)
-	expect(giveStateOfCellIn( 1, 0, newWorld)).tobe(State.alive)
-	expect(giveStateOfCellIn( 1, 1, newWorld)).tobe(State.dead)
-	expect(giveStateOfCellIn( 1, 2, newWorld)).tobe(State.alive)
-	expect(giveStateOfCellIn( 2, 1, newWorld)).tobe(State.alive)
-
-
-
+	expect(giveStateOfCellIn( 0, 1, newWorld)).toBe(State.alive)
+	expect(giveStateOfCellIn( 1, 0, newWorld)).toBe(State.alive)
+	expect(giveStateOfCellIn( 1, 1, newWorld)).toBe(State.dead)
+	expect(giveStateOfCellIn( 1, 2, newWorld)).toBe(State.alive)
+	expect(giveStateOfCellIn( 2, 1, newWorld)).toBe(State.alive)
 })
