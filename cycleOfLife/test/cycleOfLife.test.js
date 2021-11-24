@@ -1,12 +1,12 @@
 import cycleOfLife from '../src/cycleOfLife';
-import _, { xor } from 'lodash'
+import _, { words, xor } from 'lodash'
 
 const State = {
   dead: 0,
   alive: 1
 }
 
-function createWorld(width, height) {
+function createWorld(height, width) {
   const world = new Array
   for (let i = 0; i < height; i++) {
     world.push(new Array(width).fill(State.dead))
@@ -14,13 +14,13 @@ function createWorld(width, height) {
   return world
 }
 
-function giveLife(width, height, world) {
+function giveLife(height, width, world) {
   if (width < 0 || height < 0)
     throw "Out of bounds"
   world[height][width] = State.alive
 }
 
-function giveStateOfCellIn(width, height, world) {
+function giveStateOfCellIn(height, width, world) {
   return world[height][width]
 }
 
@@ -38,14 +38,20 @@ function resolveWorldTick(world) {
 
 	let mapCopy = _.cloneDeep(world)
 
-
-
   for (let height = 0; height < world.length; height++) {
     for (let width = 0; width < world[height].length; width++) {
-      const stateOfCell = shouldDie(height, width, world)
-      console.log(stateOfCell)
-      if (stateOfCell) {
-        mapCopy[height][width] = State.dead
+      if (world[height][width] == State.alive) {
+        const stateOfCell = shouldDie(height, width, world)
+        // console.log(height,width, 'is should die: ', stateOfCell)
+        if (stateOfCell) {
+          mapCopy[height][width] = State.dead
+        }
+      } else {
+        const stateOfCell = shouldBeResurected(height, width, world)
+        // console.log(height,width, 'is still resurected: ', stateOfCell)
+        if (stateOfCell) {
+          mapCopy[height][width] = State.alive
+        }
       }
     }
   }
@@ -53,7 +59,7 @@ function resolveWorldTick(world) {
 	return mapCopy
 }
 
-function shouldDie(height, width, world) { //height, width
+function countCellAliveAroundAt(height, width, world) {
   let countAlive = 0
   
   // top
@@ -74,7 +80,17 @@ function shouldDie(height, width, world) { //height, width
   // Right + Bot
   countAlive += ((height + 1 < world[0].length) && (width + 1 < world.length) && world[height + 1][width + 1] == State.alive) ? 1 : 0 
   
-  console.log('State of '+height+', '+width+' => '+ countAlive)
+  return countAlive
+}
+
+function shouldBeResurected(height, width, world) {
+  let countAlive = countCellAliveAroundAt(height, width, world);
+
+  return countAlive == 3
+}
+
+function shouldDie(height, width, world) { //height, width
+  let countAlive = countCellAliveAroundAt(height, width, world)
   
   return countAlive < 2 || countAlive > 3
 }
@@ -95,7 +111,7 @@ test('Hello Cell World', () => {
 test('Hello living Cell', () => {
   const world = createWorld(3,3)
   giveLife(2, 1, world)
-  expect(world[1][2]).toBe(State.alive)
+  expect(world[2][1]).toBe(State.alive)
 })
 
 test('Give life not in bound with width', () => {
@@ -179,4 +195,31 @@ test('If a cell got more than 3 neighboor', () => {
 	expect(giveStateOfCellIn( 1, 1, newWorld)).toBe(State.dead)
 	expect(giveStateOfCellIn( 1, 2, newWorld)).toBe(State.alive)
 	expect(giveStateOfCellIn( 2, 1, newWorld)).toBe(State.alive)
+})
+
+test('If a dead cell is surounded by 3 cells alive it should be resurected', () => {
+  const world = createWorld(3, 3)
+
+  
+	//start
+	//010
+	//100
+	//010
+	//expected
+	//000
+	//110
+	//000
+	const expectedWorld = createWorld(3, 3)
+  giveLife(1, 0, expectedWorld)
+  giveLife(1, 1, expectedWorld)
+
+
+	giveLife(0,1, world)
+	giveLife(1,0, world)
+	giveLife(2,1, world)
+	//When
+	const newWorld =  resolveWorldTick(world)
+
+	//Then
+  expect(newWorld).toStrictEqual(expectedWorld)
 })
