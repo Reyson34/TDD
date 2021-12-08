@@ -14,6 +14,10 @@ describe('Account', () => {
     account.deposit(500);
     let result = account.printStatement();
 
-    expect(result).toBe('Date\tAmount\tBalance')
+    let expectedResult = `
+    Date             Amount      Balance
+    2021-12-02          500          500
+    `
+    expect(result).toBe(expectedResult)
   })
 })
