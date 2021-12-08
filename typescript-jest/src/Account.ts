@@ -14,7 +14,7 @@ export class Account {
 
   deposit(amount): void {
     const balance = new Balance;
-    balance.deposit(amount);
+    // balance.deposit(amount);
   }
 
 
