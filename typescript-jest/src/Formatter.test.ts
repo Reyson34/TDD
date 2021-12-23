@@ -11,7 +11,7 @@ describe('Formatter', () => {
         ])
 
         expect(result).toBe(
-    'Date       Amount  Balance\n' +
+            'Date        Amount  Balance\n' +
             '2021-12-02   +500      500\n'
         )
     })
