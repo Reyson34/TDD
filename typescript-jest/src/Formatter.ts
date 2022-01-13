@@ -13,14 +13,11 @@ export class Formatter {
 
         Date    __Amount__Balance\n
         XXXXXXXX__ YYYY___   ZZZ_\n
-
     */
     /*
         pour chaque tableau de données
             chercher la plus longue valeur
             pour toutes les colonnes sauf la premiere lui ajouter 2
-
-            
 
         pour chaque tableau de données
             prendre le premier et generer la ligne de titre
@@ -28,12 +25,7 @@ export class Formatter {
             Pour chaque autre données
                 premiere donnée: aligner à gauche
                 sinon aligner à droite -1 caractere
-
-
-
-
     */
-
     columnLength = (arr) => {
         // contient la longeur max de chaque colonne
         const maxLenght = []
@@ -52,21 +44,19 @@ export class Formatter {
         const colLength = this.columnLength(arr)
 
         const result = []
-        //on va parcourir uniquement la premiere valeur de chaque ligne de arr
-        //ces valeurs sont les headers
-        arr.forEach((col, indexCol) => {
-            col.forEach((row, indexRow) => {
-                if(row == 0){ // cas des headers
-                    if(indexCol == 0) result[0]= row.padEnd(colLength[0]) 
-                    else result[indexCol] = row.padEnd(row.length).padStart(colLength[indexCol])//    (colLength - col.lenght-1) row.length 1
+        arr.forEach((col, indexCol) => {//pour chaque colonne
+            col.forEach((row, indexRow) => {//pour chaque ligne
+                if(result[indexRow] == undefined) result[indexRow] = ""
+                if(indexRow == 0){ // cas des headers
+                    if(indexCol == 0) result[indexRow] += row.padEnd(colLength[0]) 
+                    else result[indexRow] += row.padStart(colLength[indexCol])
                 }else{
-
+                    if(indexCol == 0) result[indexRow] += row.padEnd(colLength[0])
+                    else result[indexRow] += row.padEnd(row.length+1).padStart(colLength[indexCol])
                 }
             });
-
         });
-
-        return result.join('')
+        return result.join('\n')+'\n'
     }
 
 
