@@ -21,7 +21,7 @@ export class Account {
     ]
     for (var i = 0; i < list.length; i++) {
       initialTab[0].push(list[i].date.toISOString().split('T')[0])
-      initialTab[1].push('+' + list[i].value)
+      initialTab[1].push(list[i].value > 0 ? '+' + list[i].value : list[i].value.toString())
       initialTab[2].push(this.balance.calculate(list.slice(0, i + 1)).toString())
     }
     return initialTab
@@ -39,4 +39,7 @@ export class Account {
     this.list.push(new Transaction(new Date(), amount))
   }
 
+  withdraw(amount): void {
+    this.list.push(new Transaction(new Date(), -amount))
+  }
 }
