@@ -1,0 +1,15 @@
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/bin/Debug/net6.0/Touhiteur
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/bin/Debug/net6.0/Touhiteur.deps.json
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/bin/Debug/net6.0/Touhiteur.runtimeconfig.json
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/bin/Debug/net6.0/Touhiteur.dll
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/bin/Debug/net6.0/Touhiteur.pdb
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/obj/Debug/net6.0/Touhiteur.csproj.AssemblyReference.cache
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/obj/Debug/net6.0/Touhiteur.GeneratedMSBuildEditorConfig.editorconfig
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/obj/Debug/net6.0/Touhiteur.AssemblyInfoInputs.cache
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/obj/Debug/net6.0/Touhiteur.AssemblyInfo.cs
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/obj/Debug/net6.0/Touhiteur.csproj.CoreCompileInputs.cache
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/obj/Debug/net6.0/Touhiteur.dll
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/obj/Debug/net6.0/refint/Touhiteur.dll
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/obj/Debug/net6.0/Touhiteur.pdb
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/obj/Debug/net6.0/Touhiteur.genruntimeconfig.cache
+/Users/romaincivel/Boulot/kata/TDD/touhiteur/Touhiteur/obj/Debug/net6.0/ref/Touhiteur.dll
